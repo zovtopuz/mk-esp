@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width," initial-scale="1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Users/zovtopuz/Documents/Arduino/sketch_jan07a/frontEsp/style/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="wiew">
+            <h1>Led controller</h1>
+            <h3>Current color <span id="color"></span></h3>
+            <div class="button-on">
+                <button id="white" class="white" onclick="changeColor('white')" name="on">LED WHT</button>
+            </div>
+            <div class="button-on">
+                <button id="red" class="red" onclick="changeColor('red')">LED RED</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    let color = document.getElementById('color');
+    let white = document.getElementById('white');
+    let red = document.getElementById('red');
+
+    async function changeColor(param) {
+        const urlChange = `http://localhost:5000/api/change_${param}`;
+        let res = await fetch(urlChange, {
+            method: 'POST',
+            mode: 'no-cors'
+        });
+        checkColor()
+    }
+
+    async function checkColor() {
+        const urlChange = `http://localhost:5000/api/current_pin`;
+        let res = await fetch(urlChange, {
+            mode: 'no-cors'
+        });
+
+        color.innerHTML = await res.json()
+    }
+
+    window.onload = () => {
+        checkColor()
+    }
+</script>
